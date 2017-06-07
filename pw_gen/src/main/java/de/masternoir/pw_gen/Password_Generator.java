@@ -10,16 +10,15 @@ import java.util.regex.Pattern;
  */
 public class Password_Generator 
 {
-	public boolean b_letters_lower_case = false;
-	public boolean b_letters_upper_case = false;
-	public boolean b_numbers = false;
-	public boolean b_additional_characters = false;
+	private boolean b_letters_lower_case = false;
+	private boolean b_letters_upper_case = false;
+	private boolean b_numbers = false;
+	private boolean b_additional_characters = false;
 	
-	String letters_lower_case = "abcdefghijklmnopqrstuvwxyz";
-	String letters_upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	String numbers = "0123456789";
-	String additional_characters = "!?#+~-_/*§$%&";
-	String additional_characters_regex = "\\!\\?#\\+~\\-_/*§$%&";
+	private String letters_lower_case = "abcdefghijklmnopqrstuvwxyz";
+	private String letters_upper_case = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private String numbers = "0123456789";
+	private String additional_characters = "!?#+~-_/*$%&";
 	
     public static void main( String[] args )
     {	
@@ -40,8 +39,6 @@ public class Password_Generator
     		pw.append(chars.charAt(random.nextInt(chars.length())));
     	}
     	
-    	System.out.println(pw.toString());
-    	
     	return pw.toString();
     }
     
@@ -54,7 +51,7 @@ public class Password_Generator
     	
     	Pattern pat;
     	Matcher mat;
-    	boolean matches = false;
+    	boolean matches = true;
     	String[] cases = {letters_lower_case, letters_upper_case, numbers, "\\p{Punct}"};
     	
     	for(String s : cases){
@@ -62,12 +59,17 @@ public class Password_Generator
     		mat  = pat.matcher(pw);
     		matches = mat.matches();
     		
+    		/*System.out.println("##############");
+    		System.out.println(".*[" + s + "].*");
+    		System.out.println(pw);*/
+    		
+    		//if(!Pattern.matches( ".*([" + s + "]*).*", pw)){
     		if(!matches){
     			SecureRandom random = new SecureRandom();
     	    	StringBuilder modified_pw = new StringBuilder(len);
     	    	modified_pw.append(pw);
     	    	
-    	    	modified_pw.setCharAt(random.nextInt(modified_pw.length()), (s.charAt(random.nextInt(s.length()))));
+    	    	modified_pw.setCharAt(random.nextInt(modified_pw.length()), (additional_characters.charAt(random.nextInt(additional_characters.length()))));
     	    	
     	    	System.out.println(modified_pw.toString());
     	    	return getComplexPassword(len, modified_pw.toString());
